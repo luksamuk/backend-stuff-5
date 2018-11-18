@@ -1,0 +1,115 @@
+#+TITLE: Treinamento NextStep: Aula 5
+#+AUTHOR: Lucas Vieira
+#+OPTIONS: toc:nil
+
+* Informação
+Escrevi esta breve documentação com o intuito de explicar algumas coisas que
+possam não ter ficado muito claras no exercício.
+
+* Design do Banco de Dados
+Abaixo, uma lista do layout das tabelas criadas. Utilizei esta lista muitas
+vezes durante a implementação.
+
+** =users=
+- =user_id               int; auto-increment=
+- =user_name             varchar(255)=
+- =user_email            varchar(100)=
+- =user_address          varchar(500)=
+- =user_phone            varchar(20)=
+
+** =borrowings=
+- =borrowing_id          int; auto-increment=
+- =borrowing_datetime    Datetime=
+- =borrowing_user_id     int; FK: users.user_id=
+- =borrowing_devolution  Date=
+
+** =lendings=
+- =lending_book_id       int; FK: books.book_id=
+- =lending_borrowing_id  int; FK: borrowings.borrowing_id=
+
+** =books=
+- =book_id               int; auto-increment=
+- =book_title            varchar(255)=
+- =book_author           varchar(100)=
+- =book_section_id       int; FK: sections.section_id=
+
+** =sections=
+- =section_id            int; auto-increment=
+- =section_description   varchar(255)=
+- =section_location      varchar(255)=
+
+
+* Análise das Dependências no Banco de Dados
+- Objetos que podem existir sem dependências: Usuários, Seções
+- A existência de um Livro depende de uma Seção
+- Um empréstimo é feito por um Usuário e ocorre sobre um Livro
+- A existência do empréstimo (Borrowing) é dependente da relação de empréstimo
+  em si (Lending) (NOTA: talvez fosse interessante juntar estas tabelas)
+
+
+* ORM
+Ao implementar o esquema de manipulação de dados utilizando orientação a
+objetos, o foco ficou em escrever o mínimo possível e, ainda assim, manter a
+consistência.
+
+Como todas as possíveis implementações de objetos seguiam um padrão, criei
+uma interface =DBRepr= (em =dbrepr.object.php=), que descreve, em linhas gerais,
+o que todos os objetos de todos os arquivos =*.object.php= possuem.
+
+Em adição, verifiquei que a tabela =lendings= não precisaria de um objeto em si
+para representar sua função, uma vez que não possuiria número de identificação
+por linha. Assim, ela serve apenas como elo entre livros e representações de
+empréstimos.
+
+* Relação de arquivos
+- Banco de Dados
+  - =src/db.object.php=
+- Objetos do BD
+  - =src/dbrepr.object.php=
+  - =src/book.object.php=
+  - =src/borrowing.object.php=
+  - =src/section.object.php=
+  - =src/user.object.php=
+- Utilitários
+  - =src/lending.php=
+  - =src/requires.php=
+- Exercícios
+  - =src/delete.php=
+  - =src/index.php=
+  - =src/insert.php=
+  - =src/read.php=
+- Dumps
+  - =treinamento-backend.sql=
+  - =dumps/dumpAntes41.sql=
+  - =dumps/dumpDepois41.sql=
+  - =dumps/dumpAntes42.sql=
+  - =dumps/dumpDepois42.sql=
+  - =dumps/dumpAntes43.sql=
+  - =dumps/dumpDepois43.sql=
+  - =dumps/dumpAntes44.sql=
+  - =dumps/dumpDepois44.sql=
+- Extras
+  - =src/index.php=
+  - =README.org=
+  - =README.pdf=
+  - =LICENSE=
+
+
+
+* Extras
+Um dump do banco de dados antes de todas as operações está no arquivo
+=treinamento-backend.sql=.
+
+Os dumps pedidos estão na pasta =dumps=.
+
+O código completo da aplicação encontra-se em =src=.
+
+Nenhum framework JS foi utilizado durante a codificação; achei que seria mais
+interessante utilizar-se apenas de tags HTML5 padrão. Todavia, a utilização de
+CSS customizado ou mesmo de algum framework poderia ser facilmente adaptado ao
+resultado mostrado em =read.php=.
+
+
+* Licença
+Este programa completo foi desenvolvido sob a Licença MIT. O mesmo pode ser
+utilizado para qualquer propósito, desde que a licença seja respeitada.
